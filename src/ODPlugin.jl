@@ -4,7 +4,7 @@
 
 module ODPlugin
 
-export ODPLUGIN
+export ODPLUGINl
 
 using Reexport
 using Cruise
@@ -14,7 +14,13 @@ const ODPLUGIN = CRPlugin()
 const APP = ODApp()
 PHASE = :preupdate
 
-add_system!(ODPlugin, APP)
+const ID = add_system!(ODPLUGIN, APP)
+
+Outdoors.connect(NOTIF_ERROR) do msg,err
+	node = ODPLUGIN.idtonode[ID]
+	setstatus(node, PLUGIN_ERR)
+	setlasterr(node, msg*err)
+end
 
 ################################################# PLUGIN LIFECYCLE ####################################################
 
@@ -38,3 +44,4 @@ function Outdoors.CreateWindow(app::CruiseApp, style::Type{<:AbstractStyle}, arg
 	InitStyle(style)
 	return CreateWindow(APP, style, args...)
 end
+
