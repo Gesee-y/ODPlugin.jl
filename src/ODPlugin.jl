@@ -10,6 +10,10 @@ using Reexport
 using Cruise
 @reexport using Outdoors
 
+struct ODException <: Exception
+	msg::String
+end
+
 const ODPLUGIN = CRPlugin()
 const APP = ODApp()
 PHASE = :preupdate
@@ -19,7 +23,7 @@ const ID = add_system!(ODPLUGIN, APP)
 Outdoors.connect(NOTIF_ERROR) do msg,err
 	node = ODPLUGIN.idtonode[ID]
 	setstatus(node, PLUGIN_ERR)
-	setlasterr(node, msg*err)
+	setlasterr(node, ODException(msg*err))
 end
 
 ################################################# PLUGIN LIFECYCLE ####################################################
