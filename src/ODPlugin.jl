@@ -4,13 +4,17 @@
 
 module ODPlugin
 
+export ODPLUGIN
+
+using Reexport
 using Cruise
-using Outdoors
+@reexport using Outdoors
 
 const ODPLUGIN = CRPlugin()
 const APP = ODApp()
+PHASE = :preupdate
 
-add_system!(ODPlugin)
+add_system!(ODPlugin, APP)
 
 ################################################# PLUGIN LIFECYCLE ####################################################
 
@@ -20,7 +24,7 @@ function Cruise.awake!(n::CRPluginNode{ODApp})
 end
 
 function Cruise.update!(n::CRPluginNode{ODApp})
-	GetEvents(n.obj)
+	EventLoop(n.obj)
 end
 
 function Cruise.shutdown!(n::CRPluginNode{ODApp})
@@ -30,7 +34,7 @@ end
 
 ################################################## OTHER FUNCTIONS #####################################################
 
-function Outdoors.CreateWindow(app::CruiseApp, style, args...)
+function Outdoors.CreateWindow(app::CruiseApp, style::Type{<:AbstractStyle}, args...)
 	InitStyle(style)
 	return CreateWindow(APP, style, args...)
 end
