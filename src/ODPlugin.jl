@@ -8,9 +8,11 @@ using Cruise
 using Outdoors
 
 const ODPLUGIN = CRPlugin()
+const APP = ODApp()
 
-app = ODApp()
 add_system!(ODPlugin)
+
+################################################# PLUGIN LIFECYCLE ####################################################
 
 function Cruise.awake!(n::CRPluginNode{ODApp})
 	InitOutdoor()
@@ -26,3 +28,9 @@ function Cruise.shutdown!(n::CRPluginNode{ODApp})
 	setstatus(n, PLUGIN_OFF)
 end
 
+################################################## OTHER FUNCTIONS #####################################################
+
+function Outdoors.CreateWindow(app::CruiseApp, style, args...)
+	InitStyle(style)
+	return CreateWindow(APP, style, args...)
+end
