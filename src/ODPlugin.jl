@@ -33,7 +33,7 @@ function Cruise.awake!(n::CRPluginNode{ODApp})
 	setstatus(n, PLUGIN_OK)
 end
 
-function Cruise.update!(n::CRPluginNode{ODApp})
+function Cruise.update!(n::CRPluginNode{ODApp}, dt)
 	EventLoop(n.obj)
 end
 
