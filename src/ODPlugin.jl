@@ -4,7 +4,7 @@
 
 module ODPlugin
 
-export ODPLUGINl
+export ODPLUGIN
 
 using Reexport
 using Cruise
@@ -18,7 +18,7 @@ const ODPLUGIN = CRPlugin()
 const APP = ODApp()
 PHASE = :preupdate
 
-const ID = add_system!(ODPLUGIN, APP)
+const ID = add_system!(ODPLUGIN, APP; mainthread=true)
 
 Outdoors.connect(NOTIF_ERROR) do msg,err
 	node = ODPLUGIN.idtonode[ID]
@@ -33,7 +33,8 @@ function Cruise.awake!(n::CRPluginNode{ODApp})
 	setstatus(n, PLUGIN_OK)
 end
 
-function Cruise.update!(n::CRPluginNode{ODApp}, dt)
+function Cruise.update!(n::CRPluginNode{ODApp})
+	#println(n.lasterr)
 	EventLoop(n.obj)
 end
 
@@ -44,8 +45,9 @@ end
 
 ################################################## OTHER FUNCTIONS #####################################################
 
-function Outdoors.CreateWindow(app::CruiseApp, style::Type{<:AbstractStyle}, args...)
-	InitStyle(style)
+function Outdoors.CreateWindow(style::Type{<:AbstractStyle}, args...)
+	InitOutdoor(style)
 	return CreateWindow(APP, style, args...)
 end
 
+end #module
